@@ -22,21 +22,29 @@
         <!--main app-->
         <div class="row">
             <div class="col-6 offset-2">
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="what's in your mind?" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                    <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button">Add to do</button>
+                <form action="{% url 'add' %}" method="POST" role="form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            {{ forms.text }}
+                            <div class="input-group-append">
+                            <button type="submit" class="btn btn-outline-secondary">Add to do</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
             <div class="col-6 offset-2">
                 <ul class="list-group cProductsList"> 
-                    <li class="list-group-item d-flex justify-content-between"><p class="p-0 m-0 flex-grow-1">First item</p> 
-                        <button class="btn-danger">DELETE</button>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between"><p class="p-0 m-0 flex-grow-1">Second item</p>  
-                        <button class="btn-danger">DELETE</button>
-                    </li> 
+                    {% for todo in todo_items %}
+                        {% if not todo.completed %}
+                        <li class="list-group-item d-flex justify-content-between"><p class="p-0 m-0 flex-grow-1">{{ todo.text }}</p> 
+                            <a href="{% url 'completed' todo.id %}">
+                                <button class="btn-danger">DELETE</button>
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
